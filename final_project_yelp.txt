@@ -1,0 +1,648 @@
+Data Scientist Role Play: Profiling and Analyzing the Yelp Dataset Coursera Worksheet
+
+This is a 2-part assignment. In the first part, you are asked a series of questions that will help you profile and understand the data just like a data scientist would. For this first part of the assignment, you will be assessed both on the correctness of your findings, as well as the code you used to arrive at your answer. You will be graded on how easy your code is to read, so remember to use proper formatting and comments where necessary.
+
+In the second part of the assignment, you are asked to come up with your own inferences and analysis of the data for a particular research question you want to answer. You will be required to prepare the dataset for the analysis you choose to do. As with the first part, you will be graded, in part, on how easy your code is to read, so use proper formatting and comments to illustrate and communicate your intent as required.
+
+For both parts of this assignment, use this "worksheet." It provides all the questions you are being asked, and your job will be to transfer your answers and SQL coding where indicated into this worksheet so that your peers can review your work. You should be able to use any Text Editor (Windows Notepad, Apple TextEdit, Notepad ++, Sublime Text, etc.) to copy and paste your answers. If you are going to use Word or some other page layout application, just be careful to make sure your answers and code are lined appropriately.
+In this case, you may want to save as a PDF to ensure your formatting remains intact for you reviewer.
+
+
+
+Part 1: Yelp Dataset Profiling and Understanding
+
+1. Profile the data by finding the total number of records for each of the tables below:
+
+SELECT 'attribute' column, COUNT(*)
+FROM attribute
+UNION
+SELECT 'business' column, COUNT(*)
+FROM business
+UNION
+SELECT 'category' column, COUNT(*)
+FROM category
+UNION
+SELECT 'checkin' column, COUNT(*)
+FROM checkin
+UNION
+SELECT 'elite_year' column, COUNT(*)
+FROM elite_years
+UNION
+SELECT 'friend' column, COUNT(*)
+FROM friend
+UNION
+SELECT 'hours' column, COUNT(*)
+FROM hours
+UNION
+SELECT 'photo' column, COUNT(*)
+FROM photo
+UNION
+SELECT 'review' column, COUNT(*)
+FROM review
+UNION
+SELECT 'tip' column, COUNT(*)
+FROM tip
+UNION
+SELECT 'user' column, COUNT(*)
+FROM user;
+	
+i. Attribute table = 10000
+ii. Business table = 10000
+iii. Category table = 10000
+iv. Checkin table = 10000
+v. elite_years table = 10000
+vi. friend table = 10000
+vii. hours table = 10000
+viii. photo table = 10000
+ix. review table = 10000
+x. tip table = 10000
+xi. user table = 10000
+	
+
+
+2. Find the total number of distinct records for the primary keys in each of the tables listed below:
+
+SELECT 'business.id' column, COUNT(DISTINCT(id))
+FROM business
+UNION
+SELECT 'hours.business_id' column, COUNT(DISTINCT(business_id))
+FROM hours
+UNION
+SELECT 'category.business_id' column, COUNT(DISTINCT(business_id))
+FROM category
+UNION
+SELECT 'attribute.business_id' column, COUNT(DISTINCT(business_id))
+FROM attribute
+UNION
+SELECT 'review.id' column, COUNT(DISTINCT(id))
+FROM review
+UNION
+SELECT 'checkin.business_id' column, COUNT(DISTINCT(business_id))
+FROM checkin
+UNION
+SELECT 'photo.id' column, COUNT(DISTINCT(id))
+FROM photo
+UNION
+SELECT 'tip.user_id' column, COUNT(DISTINCT(user_id))
+FROM tip
+UNION
+SELECT 'tip.business_id' column, COUNT(DISTINCT(business_id))
+FROM tip
+UNION
+SELECT 'user.id' column, COUNT(DISTINCT(id))
+FROM user
+UNION
+SELECT 'friend.user_id' column, COUNT(DISTINCT(user_id))
+FROM friend
+UNION
+SELECT 'elite_years.user_id' column, COUNT(DISTINCT(user_id))
+FROM elite_years;
+
+
+i. Business = 10000
+ii. Hours = 1562
+iii. Category = 2643
+iv. Attribute = 1115
+v. Review = 10000
+vi. Checkin = 493
+vii. Photo = 10000
+viii. Tip = 537 (user_id), 3979 (business_id)
+ix. User = 10000
+x. Friend = 11
+xi. Elite_years = 2780
+
+Note: Primary Keys are denoted in the ER-Diagram with a yellow key icon.	
+
+
+
+3. Are there any columns with null values in the Users table? Indicate "yes," or "no."
+
+	Answer: no
+	
+	
+	SQL code used to arrive at answer:
+	
+SELECT
+COUNT(*) - COUNT(id) AS id,
+COUNT(*) - COUNT(name) AS name,
+COUNT(*) - COUNT(review_count) AS review_count,
+COUNT(*) - COUNT(yelping_since) AS yelping_since,
+COUNT(*) - COUNT(useful) AS useful,
+COUNT(*) - COUNT(cool) AS cool,
+COUNT(*) - COUNT(fans) AS fans,
+COUNT(*) - COUNT(average_stars) AS average_stars,
+COUNT(*) - COUNT(compliment_hot) AS compliment_hot,
+COUNT(*) - COUNT(compliment_more) AS compliment_more,
+COUNT(*) - COUNT(compliment_profile) AS compliment_profile,
+COUNT(*) - COUNT(compliment_cute) AS compliment_cute,
+COUNT(*) - COUNT(compliment_list) AS compliment_list,
+COUNT(*) - COUNT(compliment_note) AS compliment_note,
+COUNT(*) - COUNT(compliment_plain) AS compliment_plain,
+COUNT(*) - COUNT(compliment_cool) AS compliment_cool,
+COUNT(*) - COUNT(compliment_funny) AS compliment_funny,
+COUNT(*) - COUNT(compliment_writer) AS compliment_writer,
+COUNT(*) - COUNT(compliment_photos) AS compliment_photos
+FROM user;	
+
+Alternatively:
+
+SELECT *
+FROM  user
+WHERE id IS NULL
+	OR name IS NULL
+	OR review_count IS NULL
+	OR yelping_since IS NULL
+	OR useful IS NULL
+	OR funny IS NULL
+	OR cool IS NULL
+	OR fans IS NULL
+	OR average_stars IS NULL
+	OR compliment_hot IS NULL
+	OR compliment_more IS NULL
+	OR compliment_profile IS NULL	
+	OR compliment_cute IS NULL
+	OR compliment_list IS NULL
+	OR compliment_note IS NULL
+	OR compliment_plain IS NULL
+	OR compliment_cool IS NULL
+	OR compliment_funny IS NULL
+	OR compliment_writer IS NULL
+	OR compliment_photos IS NULL;
+	
+4. For each table and column listed below, display the smallest (minimum), largest (maximum), and average (mean) value for the following fields:
+
+	i. Table: Review, Column: Stars
+	
+		min: 1		max: 5		avg: 3.7082
+		
+	
+	ii. Table: Business, Column: Stars
+	
+		min: 1.0	max: 5.0	avg: 3.6549
+		
+	
+	iii. Table: Tip, Column: Likes
+	
+		min: 0		max: 2		avg: 0.0144
+		
+	
+	iv. Table: Checkin, Column: Count
+	
+		min: 1		max: 53		avg: 1.9414
+		
+	
+	v. Table: User, Column: Review_count
+	
+		min: 0		max: 2000	avg: 24.2995
+		
+
+
+5. List the cities with the most reviews in descending order:
+
+	SQL code used to arrive at answer:
+	
+SELECT city, sum(review_count)
+FROM business
+GROUP BY city
+ORDER BY sum(review_count) DESC;
+	
+	Copy and Paste the Result Below:
+	
++-----------------+-------------------+
+| city            | sum(review_count) |
++-----------------+-------------------+
+| Las Vegas       |             82854 |
+| Phoenix         |             34503 |
+| Toronto         |             24113 |
+| Scottsdale      |             20614 |
+| Charlotte       |             12523 |
+| Henderson       |             10871 |
+| Tempe           |             10504 |
+| Pittsburgh      |              9798 |
+| Montréal        |              9448 |
+| Chandler        |              8112 |
+| Mesa            |              6875 |
+| Gilbert         |              6380 |
+| Cleveland       |              5593 |
+| Madison         |              5265 |
+| Glendale        |              4406 |
+| Mississauga     |              3814 |
+| Edinburgh       |              2792 |
+| Peoria          |              2624 |
+| North Las Vegas |              2438 |
+| Markham         |              2352 |
+| Champaign       |              2029 |
+| Stuttgart       |              1849 |
+| Surprise        |              1520 |
+| Lakewood        |              1465 |
+| Goodyear        |              1155 |
++-----------------+-------------------+
+(Output limit exceeded, 25 of 362 total rows shown)
+	
+6. Find the distribution of star ratings to the business in the following cities:
+
+i. Avon
+
+SQL code used to arrive at answer:
+
+SELECT stars, COUNT(*) AS count
+FROM business
+WHERE city = 'Avon'
+GROUP BY stars;
+
+Copy and Paste the Resulting Table Below (2 columns ñ star rating and count):
+
++-------+-------+
+| stars | count |
++-------+-------+
+|   1.5 |     1 |
+|   2.5 |     2 |
+|   3.5 |     3 |
+|   4.0 |     2 |
+|   4.5 |     1 |
+|   5.0 |     1 |
++-------+-------+
+
+ii. Beachwood
+
+SQL code used to arrive at answer:
+
+SELECT stars, COUNT(*) AS count
+FROM business
+WHERE city = 'Beachwood'
+GROUP BY stars;
+
+Copy and Paste the Resulting Table Below (2 columns ñ star rating and count):
+		
++-------+-------+
+| stars | count |
++-------+-------+
+|   2.0 |     1 |
+|   2.5 |     1 |
+|   3.0 |     2 |
+|   3.5 |     2 |
+|   4.0 |     1 |
+|   4.5 |     2 |
+|   5.0 |     5 |
++-------+-------+
+
+7. Find the top 3 users based on their total number of reviews:
+		
+	SQL code used to arrive at answer:
+	
+SELECT id, name, review_count
+FROM user
+ORDER BY review_count DESC
+LIMIT 3;
+		
+	Copy and Paste the Result Below:
+		
++------------------------+--------+--------------+
+| id                     | name   | review_count |
++------------------------+--------+--------------+
+| -G7Zkl1wIWBBmD0KRy_sCw | Gerald |         2000 |
+| -3s52C4zL_DHRK0ULG6qtg | Sara   |         1629 |
+| -8lbUNlXVSoXqaRRiHiSNg | Yuri   |         1339 |
++------------------------+--------+--------------+
+
+8. Does posing more reviews correlate with more fans?
+
+Yes
+
+	Please explain your findings and interpretation of the results:
+
+One way to approach this problem would be to first establish a baseline. From the below query, we can see that the average user has done 24 reviews and has less than 2 fans.
+	
+SELECT AVG(review_count), AVG(fans)
+FROM user;
+
++-------------------+-----------+
+| AVG(review_count) | AVG(fans) |
++-------------------+-----------+
+|           24.2995 |    1.4896 |
++-------------------+-----------+
+
+Now if we limit our user base to only the 100 users who have done the most reviews, we can see that these users have a much higher average number of fans compared to the typical user. So it does certainly appear that users with more reviews also tend to have more fans on average.
+
+SELECT AVG(review_count), AVG(fans)
+FROM user
+WHERE id IN (
+    SELECT id
+    FROM user
+    ORDER BY review_count DESC
+    LIMIT 100);
+
++-------------------+-----------+
+| AVG(review_count) | AVG(fans) |
++-------------------+-----------+
+|            589.04 |     56.96 |
++-------------------+-----------+
+	
+9. Are there more reviews with the word "love" or with the word "hate" in them?
+
+	Answer: love
+
+	
+	SQL code used to arrive at answer:
+
+SELECT
+  (SELECT COUNT(*)
+  FROM review
+  WHERE text LIKE '%love%') AS love,
+  (SELECT COUNT(*)
+  FROM review
+  WHERE text LIKE '%hate%') AS hate;
+	
++------+------+
+| love | hate |
++------+------+
+| 1780 |  232 |
++------+------+
+
+10. Find the top 10 users with the most fans:
+
+	SQL code used to arrive at answer:
+
+SELECT id, name, fans
+FROM user
+ORDER BY fans DESC
+LIMIT 10;	
+	
+	Copy and Paste the Result Below:
+
++------------------------+-----------+------+
+| id                     | name      | fans |
++------------------------+-----------+------+
+| -9I98YbNQnLdAmcYfb324Q | Amy       |  503 |
+| -8EnCioUmDygAbsYZmTeRQ | Mimi      |  497 |
+| --2vR0DIsmQ6WfcSzKWigw | Harald    |  311 |
+| -G7Zkl1wIWBBmD0KRy_sCw | Gerald    |  253 |
+| -0IiMAZI2SsQ7VmyzJjokQ | Christine |  173 |
+| -g3XIcCb2b-BD0QBCcq2Sw | Lisa      |  159 |
+| -9bbDysuiWeo2VShFJJtcw | Cat       |  133 |
+| -FZBTkAZEXoP7CYvRV2ZwQ | William   |  126 |
+| -9da1xk7zgnnfO1uTVYGkA | Fran      |  124 |
+| -lh59ko3dxChBSZ9U7LfUw | Lissa     |  120 |
++------------------------+-----------+------+
+	
+	
+11. Is there a strong relationship (or correlation) between having a high number of fans and being listed as "useful" or "funny?" Out of the top 10 users with the highest number of fans, what percent are also listed as ìusefulî or ìfunnyî?
+
+Key:
+0% - 25% - Low relationship
+26% - 75% - Medium relationship
+76% - 100% - Strong relationship
+	
+	SQL code used to arrive at answer:
+
+SELECT id, name, fans, useful, funny
+FROM user
+ORDER BY fans DESC
+LIMIT 10;	
+	
+	Copy and Paste the Result Below:
+
++------------------------+-----------+------+--------+--------+
+| id                     | name      | fans | useful |  funny |
++------------------------+-----------+------+--------+--------+
+| -9I98YbNQnLdAmcYfb324Q | Amy       |  503 |   3226 |   2554 |
+| -8EnCioUmDygAbsYZmTeRQ | Mimi      |  497 |    257 |    138 |
+| --2vR0DIsmQ6WfcSzKWigw | Harald    |  311 | 122921 | 122419 |
+| -G7Zkl1wIWBBmD0KRy_sCw | Gerald    |  253 |  17524 |   2324 |
+| -0IiMAZI2SsQ7VmyzJjokQ | Christine |  173 |   4834 |   6646 |
+| -g3XIcCb2b-BD0QBCcq2Sw | Lisa      |  159 |     48 |     13 |
+| -9bbDysuiWeo2VShFJJtcw | Cat       |  133 |   1062 |    672 |
+| -FZBTkAZEXoP7CYvRV2ZwQ | William   |  126 |   9363 |   9361 |
+| -9da1xk7zgnnfO1uTVYGkA | Fran      |  124 |   9851 |   7606 |
+| -lh59ko3dxChBSZ9U7LfUw | Lissa     |  120 |    455 |    150 |
++------------------------+-----------+------+--------+--------+	
+	
+	Please explain your findings and interpretation of the results:
+	
+If we compare the table above depicting the counts of useful and funny among users with the top 10 fans, we see that their counts almost universally exceed the average counts of useful and funny for typical user (see below), usually by a large degree. So I would say “strong relationship”.
+
+SELECT AVG(useful), AVG(funny)
+FROM user
+
++-------------+------------+
+| AVG(useful) | AVG(funny) |
++-------------+------------+
+|     38.0563 |    24.7927 |
++-------------+------------+	
+	
+
+Part 2: Inferences and Analysis
+
+1. Pick one city and category of your choice and group the businesses in that city or category by their overall star rating. Compare the businesses with 2-3 stars to the businesses with 4-5 stars and answer the following questions. Include your code.
+	
+i. Do the two groups you chose to analyze have a different distribution of hours?
+
+I can’t satisfactorily	 answer this one. It’s not obvious how to summarise the distribution of hours, even for one restaurant. And without that, you cannot compare distributions across groups.
+
+I suppose you would try to count the instances of each timeframe as done below and then compare counts amongst the 2-3 vs the 4-5 star group. However, there doesn’t seem to be enough cases to even make such a comparison, even if choosing Las Vegas, the city with the most businesses.
+
+SELECT hours, COUNT(*)
+FROM hours
+GROUP BY hours
+ORDER BY COUNT(*) DESC
+
++-----------------------+----------+
+| hours                 | COUNT(*) |
++-----------------------+----------+
+| Sunday|0:00-0:00      |       89 |
+| Saturday|0:00-0:00    |       81 |
+| Friday|0:00-0:00      |       76 |
+| Thursday|0:00-0:00    |       76 |
+| Tuesday|0:00-0:00     |       76 |
+| Wednesday|0:00-0:00   |       76 |
+| Monday|0:00-0:00      |       75 |
+| Monday|9:00-17:00     |       69 |
+| Tuesday|9:00-17:00    |       68 |
+| Wednesday|9:00-17:00  |       66 |
+| Monday|11:00-22:00    |       65 |
+| Friday|9:00-17:00     |       64 |
+| Thursday|11:00-22:00  |       64 |
+| Tuesday|11:00-22:00   |       64 |
+| Wednesday|11:00-22:00 |       64 |
+| Thursday|9:00-17:00   |       62 |
+| Thursday|8:00-17:00   |       61 |
+| Tuesday|8:00-17:00    |       61 |
+| Wednesday|8:00-17:00  |       61 |
+| Monday|8:00-17:00     |       58 |
+| Friday|8:00-17:00     |       57 |
+| Friday|9:00-18:00     |       54 |
+| Friday|11:00-22:00    |       53 |
+| Tuesday|11:00-21:00   |       52 |
+| Wednesday|11:00-21:00 |       51 |
++-----------------------+----------+
+(Output limit exceeded, 25 of 2052 total rows shown)
+
+ii. Do the two groups you chose to analyze have a different number of reviews?
+
+On average, among businesses in Las Vegas, those with 4-5 stars have a much greater number of reviews compared to those that have 2-3 stars.
+
+SELECT '2-3 stars' category, SUM(review_count) AS total_reviews, COUNT(*) AS n_businesses, AVG(review_count) AS mean_review_count
+FROM business
+WHERE city = 'Las Vegas'
+AND stars IN (2.0, 2.5, 3.0)
+UNION
+SELECT '4-5 stars' category, SUM(review_count) AS total_reviews, COUNT(*) AS n_businesses, AVG(review_count) AS mean_review_count
+FROM business
+WHERE city = 'Las Vegas'
+AND stars IN (4.0, 4.5, 5.0)
+
++-----------+---------------+--------------+-------------------+
+| category  | total_reviews | n_businesses | mean_review_count |
++-----------+---------------+--------------+-------------------+
+| 2-3 stars |         15265 |          403 |     37.8784119107 |
+| 4-5 stars |         46952 |          838 |     56.0286396181 |
++-----------+---------------+--------------+-------------------+       
+         
+iii. Are you able to infer anything from the location data provided between these two groups? Explain.
+
+It’s possible to calculate a mean latitude and longitude for the two groups. But it’s difficult to infer much from this statistic. We really need to visualise the businesses by plotting their locations on a map. We could do with with tools like Leaflet for instance. Then we’d likely be able to better understand the geographic distribution of star rating.
+
+SELECT '2-3 stars' category, COUNT(*) AS n_businesses, AVG(latitude) AS mean_latitude, AVG(longitude) AS mean_longitude
+FROM business
+WHERE city = 'Las Vegas'
+AND stars IN (2.0, 2.5, 3.0)
+UNION
+SELECT '4-5 stars' category, COUNT(*) AS n_businesses, AVG(latitude) AS mean_latitude, AVG(longitude) AS mean_longitude
+FROM business
+WHERE city = 'Las Vegas'
+AND stars IN (4.0, 4.5, 5.0)
+
++-----------+--------------+---------------+----------------+
+| category  | n_businesses | mean_latitude | mean_longitude |
++-----------+--------------+---------------+----------------+
+| 2-3 stars |          403 | 36.1347367246 | -115.192377171 |
+| 4-5 stars |          838 | 36.1255201671 | -115.204371122 |
++-----------+--------------+---------------+----------------+
+	
+		
+2. Group business based on the ones that are open and the ones that are closed. What differences can you find between the ones that are still open and the ones that are closed? List at least two differences and the SQL code you used to arrive at your answer.
+		
+i. Difference 1:
+
+Compared to those that have closed, businesses still open have a slightly higher average star rating, but it’s a very small difference. There is a larger gap in the average review count, which we might expect given that businesses open can still receive new reviews.
+
+SELECT is_open, COUNT(*), AVG(review_count), AVG(stars)
+FROM business
+GROUP BY is_open;
+
++---------+----------+-------------------+---------------+
+| is_open | COUNT(*) | AVG(review_count) |    AVG(stars) |
++---------+----------+-------------------+---------------+
+|       0 |     1520 |     23.1980263158 | 3.52039473684 |
+|       1 |     8480 |     31.7570754717 | 3.67900943396 |
++---------+----------+-------------------+---------------+     
+         
+ii. Difference 2:
+
+The percentage of businesses still open varies by category. For instance, only 60% of businesses in the Nightlife category remain open compared to 75% in the Restaurants category. Bars do only a little better at 65%. This could suggest higher turnover among night clubs and be good to know if you are thinking of opening a restaurant vs a nightclub.
+
+SELECT category, COUNT(*) AS n_businesses, AVG(is_open) AS percent_open
+FROM business b
+INNER JOIN category c
+ON b.id = c.business_id
+GROUP BY category
+ORDER BY COUNT(*) DESC;         
+
++---------------------------+--------------+----------------+
+| category                  | n_businesses |   percent_open |
++---------------------------+--------------+----------------+
+| Restaurants               |           71 | 0.746478873239 |
+| Shopping                  |           30 | 0.833333333333 |
+| Food                      |           23 | 0.869565217391 |
+| Nightlife                 |           20 |            0.6 |
+| Bars                      |           17 | 0.647058823529 |
+| Health & Medical          |           17 | 0.941176470588 |
+| Home Services             |           16 |         0.9375 |
+| Beauty & Spas             |           13 | 0.923076923077 |
+| Local Services            |           12 | 0.833333333333 |
+| American (Traditional)    |           11 | 0.727272727273 |
+| Active Life               |           10 |            1.0 |
+| Automotive                |            9 |            1.0 |
+| Hotels & Travel           |            9 | 0.888888888889 |
+| Burgers                   |            8 |          0.875 |
+| Sandwiches                |            8 |           0.75 |
+| Arts & Entertainment      |            7 |            1.0 |
+| Fast Food                 |            7 |            1.0 |
+| Mexican                   |            7 | 0.714285714286 |
+| American (New)            |            6 |            0.5 |
+| Event Planning & Services |            6 |            0.5 |
+| Hair Salons               |            6 |            1.0 |
+| Bakeries                  |            5 |            0.8 |
+| Doctors                   |            5 |            1.0 |
+| Indian                    |            5 |            0.8 |
+| Japanese                  |            5 |            0.6 |
++---------------------------+--------------+----------------+
+(Output limit exceeded, 25 of 257 total rows shown)         
+         	
+	
+3. For this last part of your analysis, you are going to choose the type of analysis you want to conduct on the Yelp dataset and are going to prepare the data for analysis.
+
+Ideas for analysis include: Parsing out keywords and business attributes for sentiment analysis, clustering businesses to find commonalities or anomalies between them, predicting the overall star rating for a business, predicting the number of fans a user will have, and so on. These are just a few examples to get you started, so feel free to be creative and come up with your own problem you want to solve. Provide answers, in-line, to all of the following:
+	
+i. Indicate the type of analysis you chose to do:
+         
+I’d like to explore the relationship between attributes and star rating. Attributes, like WiFi, Outdoor Seating or Bike Parking, are often fairly small investments and in the control of present business owners. Knowing which attributes are positively associated with higher star ratings would be valuable information. 
+
+
+ii. Write 1-2 brief paragraphs on the type of data you will need for your analysis and why you chose that data:
+                   
+The most important step to acquire the data would be joining the attribute table to the business table. The attributes table has 39 different attributes, including ones like ‘Alcohol’, ‘DogsAllowed’, and ‘DietaryRestrictions’, which potentially hold a wealth of valuable data for business owners.
+
+The attributes table has both name and value fields, which come in a number of different styles. Some attributes are binary; e.g. ‘HasTV’ and ‘WheelchairAccessible’ take 0 or 1 values. Other attributes have a categorical scale; e.g. ‘NoiseLevel’ could be ‘quiet’, ‘average’, ‘loud’, or ‘very_loud’. Others have a numeric scale; e.g. ‘RestaurantsPriceRange2’ varies from 1 to 4. Still others come in a JSON dictionary format; e.g. the value of ’BusinessParking’ is {"garage": false, "street": false, "validated": false, "lot": true, "valet": false}.
+      
+After a simple inner join, we have all of the relevant data. We could remove some unnecessary columns from the business table, such as very specific location details. We might want to retain `city` and `state` in order to regress our results against location, but details like `postal_code` will be too fine grain to be useful.
+
+Fields like ‘review_count’ and ‘is_open’ should also be retained to ensure a level of data quality. We might only want to consider attributes of open businesses or businesses that have exceeded a minimum threshold of reviews.
+
+iii. Output of your finished dataset:
+         
++------------------------+-----------------+-----------+-------+-------+--------------+---------+--------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
+| id                     | business_name   | city      | state | stars | review_count | is_open | attribute_name           | attribute_value                                                                                                                                 |
++------------------------+-----------------+-----------+-------+-------+--------------+---------+--------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
+| -0DET7VdEQOJVJ_v6klEug | Flaming Kitchen | Markham   | ON    |   3.0 |           25 |       1 | RestaurantsTableService  | 1                                                                                                                                               |
+| -0DET7VdEQOJVJ_v6klEug | Flaming Kitchen | Markham   | ON    |   3.0 |           25 |       1 | GoodForMeal              | {"dessert": false, "latenight": false, "lunch": true, "dinner": true, "breakfast": false, "brunch": false}                                      |
+| -0DET7VdEQOJVJ_v6klEug | Flaming Kitchen | Markham   | ON    |   3.0 |           25 |       1 | Alcohol                  | beer_and_wine                                                                                                                                   |
+| -0DET7VdEQOJVJ_v6klEug | Flaming Kitchen | Markham   | ON    |   3.0 |           25 |       1 | Caters                   | 0                                                                                                                                               |
+| -0DET7VdEQOJVJ_v6klEug | Flaming Kitchen | Markham   | ON    |   3.0 |           25 |       1 | HasTV                    | 0                                                                                                                                               |
+| -0DET7VdEQOJVJ_v6klEug | Flaming Kitchen | Markham   | ON    |   3.0 |           25 |       1 | RestaurantsGoodForGroups | 1                                                                                                                                               |
+| -0DET7VdEQOJVJ_v6klEug | Flaming Kitchen | Markham   | ON    |   3.0 |           25 |       1 | NoiseLevel               | average                                                                                                                                         |
+| -0DET7VdEQOJVJ_v6klEug | Flaming Kitchen | Markham   | ON    |   3.0 |           25 |       1 | WiFi                     | no                                                                                                                                              |
+| -0DET7VdEQOJVJ_v6klEug | Flaming Kitchen | Markham   | ON    |   3.0 |           25 |       1 | RestaurantsAttire        | casual                                                                                                                                          |
+| -0DET7VdEQOJVJ_v6klEug | Flaming Kitchen | Markham   | ON    |   3.0 |           25 |       1 | RestaurantsReservations  | 1                                                                                                                                               |
+| -0DET7VdEQOJVJ_v6klEug | Flaming Kitchen | Markham   | ON    |   3.0 |           25 |       1 | OutdoorSeating           | 0                                                                                                                                               |
+| -0DET7VdEQOJVJ_v6klEug | Flaming Kitchen | Markham   | ON    |   3.0 |           25 |       1 | RestaurantsPriceRange2   | 2                                                                                                                                               |
+| -0DET7VdEQOJVJ_v6klEug | Flaming Kitchen | Markham   | ON    |   3.0 |           25 |       1 | BikeParking              | 1                                                                                                                                               |
+| -0DET7VdEQOJVJ_v6klEug | Flaming Kitchen | Markham   | ON    |   3.0 |           25 |       1 | RestaurantsDelivery      | 0                                                                                                                                               |
+| -0DET7VdEQOJVJ_v6klEug | Flaming Kitchen | Markham   | ON    |   3.0 |           25 |       1 | Ambience                 | {"romantic": false, "intimate": false, "classy": false, "hipster": false, "touristy": false, "trendy": false, "upscale": false, "casual": true} |
+| -0DET7VdEQOJVJ_v6klEug | Flaming Kitchen | Markham   | ON    |   3.0 |           25 |       1 | RestaurantsTakeOut       | 1                                                                                                                                               |
+| -0DET7VdEQOJVJ_v6klEug | Flaming Kitchen | Markham   | ON    |   3.0 |           25 |       1 | GoodForKids              | 1                                                                                                                                               |
+| -0DET7VdEQOJVJ_v6klEug | Flaming Kitchen | Markham   | ON    |   3.0 |           25 |       1 | BusinessParking          | {"garage": false, "street": false, "validated": false, "lot": false, "valet": false}                                                            |
+| -2bYV9zVtn2F5XpiAaHt5A | Deli 194        | Edinburgh | EDH   |   3.0 |            4 |       1 | GoodForMeal              | {"dessert": false, "latenight": false, "lunch": false, "dinner": false, "breakfast": false, "brunch": false}                                    |
+| -2bYV9zVtn2F5XpiAaHt5A | Deli 194        | Edinburgh | EDH   |   3.0 |            4 |       1 | Alcohol                  | none                                                                                                                                            |
+| -2bYV9zVtn2F5XpiAaHt5A | Deli 194        | Edinburgh | EDH   |   3.0 |            4 |       1 | HasTV                    | 0                                                                                                                                               |
+| -2bYV9zVtn2F5XpiAaHt5A | Deli 194        | Edinburgh | EDH   |   3.0 |            4 |       1 | RestaurantsGoodForGroups | 1                                                                                                                                               |
+| -2bYV9zVtn2F5XpiAaHt5A | Deli 194        | Edinburgh | EDH   |   3.0 |            4 |       1 | NoiseLevel               | average                                                                                                                                         |
+| -2bYV9zVtn2F5XpiAaHt5A | Deli 194        | Edinburgh | EDH   |   3.0 |            4 |       1 | RestaurantsAttire        | casual                                                                                                                                          |
+| -2bYV9zVtn2F5XpiAaHt5A | Deli 194        | Edinburgh | EDH   |   3.0 |            4 |       1 | RestaurantsReservations  | 0                                                                                                                                               |
++------------------------+-----------------+-----------+-------+-------+--------------+---------+--------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
+(Output limit exceeded, 25 of 787 total rows shown)
+         
+iv. Provide the SQL code you used to create your final dataset:
+
+SELECT id
+, business.name AS business_name
+, city
+, state
+, stars
+, review_count
+, is_open
+, attribute.name AS attribute_name
+, attribute.value AS attribute_value
+FROM business
+INNER JOIN attribute
+ON id = business_id;
